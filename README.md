@@ -1,4 +1,4 @@
-## Navigation(导航)
+## Navigator(导航)
 
 > 导航器通过路由对象（route)来分辨不同的场景。每个路由对象都对应一个路由组件，开发者设置什么，
 导航器显示什么，所以route是导航器中重要的一个对象。
@@ -13,3 +13,68 @@
 3. 渲染场景（告诉导航器如何渲染页面）
 
 利用第一步设置的路由对象进行渲染场景
+
+#### Navigator传值
+- 例子
+
+
+    import React, { Component } from 'react';
+    import {
+        AppRegistry,
+        StyleSheet,
+        Text,
+        View,
+        Platform,
+        Button
+    } from 'react-native';
+    
+    import {StackNavigator} from 'react-navigation';
+    
+    class HomeScreen extends Component {
+        static navigationOptions={
+            title:'Home'
+        }
+    
+        render() {
+            const {navigate}=this.props.navigation;
+            return (
+                <View>
+                    <Text>home</Text>
+                    <Button onPress={()=>navigate('Chat',{user:'lucy',password:'123'})} title='go to chat'></Button>
+                </View>
+            );
+        }
+    }
+    
+    class ChatScreen extends Component{
+        static navigationOptions=({navigation})=>{
+            title:`Chat with ${navigation.state.params.user}`
+        };
+    
+        render(){
+            const {params}=this.props.navigation.state
+            return (
+                <View>
+                    <Text>chat with {params.user} ;password:{params.password}</Text>
+                </View>
+            );
+        }
+    }
+    
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#F5FCFF',
+        },
+    
+    });
+    
+    const SimpleApp=StackNavigator({
+        Home:{screen:HomeScreen},
+        Chat:{screen:ChatScreen}
+    })
+    
+    AppRegistry.registerComponent('NavigationDemo', () => SimpleApp);
+    
